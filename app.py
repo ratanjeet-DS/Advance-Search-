@@ -12,15 +12,38 @@ from langgraph.checkpoint.memory import MemorySaver
 # PAGE CONFIG
 # ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="Zerodha AI Agent",
-    page_icon="📈",
+    page_title="Support AI Agent",
+    page_icon="🤖",
     layout="centered",
 )
 
 # ─────────────────────────────────────────────
+# FORCE LIGHT THEME & WHITE BACKGROUND
+# ─────────────────────────────────────────────
+st.markdown("""
+    <style>
+        /* Force white background everywhere */
+        .stApp, .stApp > div, [data-testid="stAppViewContainer"] {
+            background-color: #ffffff !important;
+            color: #111111 !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: #ffffff !important;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #f5f5f5 !important;
+        }
+        /* Chat input area */
+        [data-testid="stBottom"] {
+            background-color: #ffffff !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# ─────────────────────────────────────────────
 # HEADER
 # ─────────────────────────────────────────────
-st.title("📈 Zerodha Ecosystem AI Agent")
+st.title("🤖 Support AI Agent")
 st.caption(
     "Ask me anything about Zerodha — charges, account setup, Varsity lessons, "
     "TradingQnA discussions, and more. I remember our conversation!"
@@ -70,9 +93,7 @@ def search_zerodha_ecosystem(query: str) -> str:
     trading rules, or investment concepts.
     """
     search = DuckDuckGoSearchResults(num_results=5)
-    scoped_query = (
-        f"site:zerodha.com OR site:tradingqna.com {query}"
-    )
+    scoped_query = f"site:zerodha.com OR site:tradingqna.com {query}"
     return search.invoke(scoped_query)
 
 
@@ -176,7 +197,7 @@ if prompt := st.chat_input("Ask about Zerodha… e.g. What are the delivery brok
                 agent = create_react_agent(
                     llm,
                     tools,
-                    state_modifier=SYSTEM_PROMPT,
+                    prompt=SYSTEM_PROMPT,
                     checkpointer=st.session_state.memory,
                 )
 
